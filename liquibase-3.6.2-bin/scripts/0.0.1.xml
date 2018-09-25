@@ -1,0 +1,252 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <preConditions>
+        <dbms type="mysql"/>
+        <runningAs username="root"/>
+    </preConditions>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 17:20 - Inserindo tabela empregado">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_schema = 'desafio_treinamento_java'
+                AND table_name = 'funcionario'
+            </sqlCheck>
+        </preConditions>
+        <comment>Inserindo tabela empregado</comment>
+        <createTable tableName="funcionario">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true" primaryKeyName="funcionario_id"/>
+            </column>
+            <column name="nome" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cpf" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dataNascimento" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sexo" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idEndereco" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="idSupervisor" type="INT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 17:45 - Inserindo tabela endereco">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_schema = 'desafio_treinamento_java'
+                AND table_name = 'endereco'
+            </sqlCheck>
+        </preConditions>
+        <comment>Inserindo tabela endereco</comment>
+        <createTable tableName="endereco">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true" primaryKeyName="endereco_id"/>
+            </column>
+            <column name="pais" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uf" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cidade" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rua" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cep" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 17:50 - Inserindo tabela departamento">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_schema = 'desafio_treinamento_java'
+                AND table_name = 'departamento'
+            </sqlCheck>
+        </preConditions>
+        <comment>Inserindo tabela departamento</comment>
+        <createTable tableName="departamento">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true" primaryKeyName="departamento_id"/>
+            </column>
+            <column name="nome" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="numero" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 17:50 - Inserindo tabela funcionario_projeto">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_schema = 'desafio_treinamento_java'
+                AND table_name = 'funcionario_projeto'
+            </sqlCheck>
+        </preConditions>
+        <comment>Inserindo tabela funcionario_projeto</comment>
+        <createTable tableName="funcionario_projeto">
+            <column name="idFuncionario" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idProjeto" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 17:50 - Inserindo tabela projeto">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_schema = 'desafio_treinamento_java'
+                AND table_name = 'projeto'
+            </sqlCheck>
+        </preConditions>
+        <comment>Inserindo tabela projeto</comment>
+        <createTable tableName="projeto">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true" primaryKeyName="projeto_id"/>
+            </column>
+            <column name="nome" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idDepartamento" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 18:00 - Inserindo a chave estrangeira fk_funcionario_endereco">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.REFERENTIAL_CONSTRAINTS
+                WHERE CONSTRAINT_SCHEMA = 'desafio_treinamento_java'
+                AND TABLE_NAME = 'funcionario'
+                AND CONSTRAINT_NAME = 'fk_funcionario_endereco'
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+            constraintName="fk_funcionario_endereco"
+            baseTableName="funcionario"
+            baseColumnNames="idEndereco"
+            referencedTableName="endereco"
+            referencedColumnNames="id"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 18:03 - Inserindo a chave estrangeira fk_funcionario_funcionario">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.REFERENTIAL_CONSTRAINTS
+                WHERE CONSTRAINT_SCHEMA = 'desafio_treinamento_java'
+                AND TABLE_NAME = 'funcionario'
+                AND CONSTRAINT_NAME = 'fk_funcionario_funcionario'
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+            constraintName="fk_funcionario_funcionario"
+            baseTableName="funcionario"
+            baseColumnNames="idSupervisor"
+            referencedTableName="funcionario"
+            referencedColumnNames="id"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 18:05 - Inserindo a chave estrangeira fk_funcionario_projeto_funcionario">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.REFERENTIAL_CONSTRAINTS
+                WHERE CONSTRAINT_SCHEMA = 'desafio_treinamento_java'
+                AND TABLE_NAME = 'funcionario_projeto'
+                AND CONSTRAINT_NAME = 'fk_funcionario_projeto_funcionario'
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+            constraintName="fk_funcionario_projeto_funcionario"
+            baseTableName="funcionario_projeto"
+            baseColumnNames="idFuncionario"
+            referencedTableName="funcionario"
+            referencedColumnNames="id"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 18:07 - Inserindo a chave estrangeira fk_funcionario_projeto_projeto">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.REFERENTIAL_CONSTRAINTS
+                WHERE CONSTRAINT_SCHEMA = 'desafio_treinamento_java'
+                AND TABLE_NAME = 'funcionario_projeto'
+                AND CONSTRAINT_NAME = 'fk_funcionario_projeto_projeto'
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+            constraintName="fk_funcionario_projeto_projeto"
+            baseTableName="funcionario_projeto"
+            baseColumnNames="idProjeto"
+            referencedTableName="projeto"
+            referencedColumnNames="id"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet author="vitor.lopes@hotmart.com" id="2018-09-25 18:10 - Inserindo a chave estrangeira fk__projeto_departamento">
+        <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.REFERENTIAL_CONSTRAINTS
+                WHERE CONSTRAINT_SCHEMA = 'desafio_treinamento_java'
+                AND TABLE_NAME = 'projeto'
+                AND CONSTRAINT_NAME = 'fk_projeto_departamento'
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+            constraintName="fk_projeto_departamento"
+            baseTableName="projeto"
+            baseColumnNames="idDepartamento"
+            referencedTableName="departamento"
+            referencedColumnNames="id"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>
